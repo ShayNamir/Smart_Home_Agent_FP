@@ -7,7 +7,6 @@ import importlib
 from pydantic_ai import Agent
 from pydantic_ai.models import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
-# OpenAIProvider not required in this version
 
 # Replace with your path if different
 from core.ha import (
@@ -91,7 +90,7 @@ class AgentRunner:
             return OpenAIModel(
                 model_name,
                 base_url=self.ollama_base_url,
-                api_key=self.ollama_api_key
+                api_key=self.ollama_api_key,
             )
         return _build
 
@@ -169,14 +168,14 @@ class AgentRunner:
 
     # -------- Architecture dispatch --------
     _ARCH_MODULES: Dict[str, str] = {
-        "standard":   "src.smart_home_agent.architectures.standard",
-        "cot":        "src.smart_home_agent.architectures.cot",
-        "react":      "src.smart_home_agent.architectures.react",
-        "reflexion":  "src.smart_home_agent.architectures.reflexion",
-        "self_refine":"src.smart_home_agent.architectures.reflexion",
-        "tot":        "src.smart_home_agent.architectures.tot",
-        # "debate":   "src.smart_home_agent.architectures.debate",          # if you add
-        # "sc":       "src.smart_home_agent.architectures.self_consistency", # if you add
+        "standard":   "Arch.standard",
+        "cot":        "Arch.cot",
+        "react":      "Arch.react",
+        "reflexion":  "Arch.reflexion",
+        "self_refine":"Arch.reflexion",
+        "tot":        "Arch.tot",
+        # "debate":   "Arch.debate",          # if you add
+        # "sc":       "Arch.self_consistency", # if you add
     }
 
     def run(self, architecture: str, user_text: str, model_type: ModelType, timeout_s: int = 120) -> str:

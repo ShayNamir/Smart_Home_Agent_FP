@@ -1,7 +1,7 @@
 from agent_runner import AgentRunner, ModelType
 import time
 
-def start_menu()->tuple[str,ModelType]:
+def start_menu()->tuple[str,ModelType,str]:
     # First, ask for model selection
     print("🤖 Welcome to Smart Home Agent!")
     print("=" * 40)
@@ -60,6 +60,8 @@ Enter your choice (1-5): """)
         arch = "standard"
 
     print(f"✅ Selected architecture: {arch}")
+    print()
+
     print()
     print("🏠 Smart Home Agent is ready!")
     print("💡 Try commands like: 'turn on the bedroom light' or 'check the door status'")

@@ -60,8 +60,9 @@ This academic research project investigates the effectiveness of different AI ar
 ### 📋 Prerequisites
 
 - 🐍 **Python 3.8+**
-- 🏠 **Home Assistant** (installed and running)
-- 🦙 **Ollama** with local models
+- 🏠 **Home Assistant** (installed and running on localhost:8123)
+- 🦙 **Ollama** with local models (running on localhost:11434)
+- 📦 **Required Python packages** (see config/requirements.txt)
 
 ### 📦 Installation
 
@@ -87,12 +88,36 @@ This academic research project investigates the effectiveness of different AI ar
    ollama pull deepseek-r1:1.5b
    ```
 
+4. **Configure Home Assistant**
+   - Ensure Home Assistant is running on `http://localhost:8123`
+   - Create a Long-Lived Access Token in Home Assistant
+   - Update the token in `core/ha.py` if needed
+
+5. **Verify Setup**
+   ```bash
+   # Test that everything works
+   python -c "from agent_runner import AgentRunner, ModelType; print('✅ Setup complete!')"
+   ```
+
 ### 🎯 Usage Examples
 
-#### 🏃‍♂️ Running the Main Agent
+#### 🏃‍♂️ Running the Main Agent (Interactive Mode)
 ```bash
 python main.py
 ```
+
+**מה קורה כשמריצים את main.py:**
+1. 🤖 **בחירת מודל AI** - תבחר מבין 6 מודלים זמינים
+2. 🏗️ **בחירת ארכיטקטורה** - תבחר מבין 5 ארכיטקטורות שונות
+3. 🏠 **הזנת פקודות** - תזין פקודות כמו "turn on the bedroom light"
+4. ⚡ **ביצוע פעולות** - הסוכן יתחבר ל-Home Assistant ויבצע את הפעולה
+
+**דוגמאות פקודות:**
+- `turn on the bedroom light` - הדלקת אור בחדר השינה
+- `turn off the kitchen light` - כיבוי אור במטבח
+- `check the door status` - בדיקת סטטוס הדלת
+- `lock the front door` - נעילת הדלת הקדמית
+- `exit` - יציאה מהמערכת
 
 #### 📊 Architecture Benchmarking
 ```bash
