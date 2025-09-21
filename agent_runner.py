@@ -169,14 +169,14 @@ class AgentRunner:
 
     # -------- Architecture dispatch --------
     _ARCH_MODULES: Dict[str, str] = {
-        "standard":   "Arch.standard",
-        "cot":        "Arch.cot",
-        "react":      "Arch.react",
-        "reflexion":  "Arch.reflexion",
-        "self_refine":"Arch.reflexion",
-        "tot":        "Arch.tot",
-        # "debate":   "Arch.debate",          # if you add
-        # "sc":       "Arch.self_consistency", # if you add
+        "standard":   "src.smart_home_agent.architectures.standard",
+        "cot":        "src.smart_home_agent.architectures.cot",
+        "react":      "src.smart_home_agent.architectures.react",
+        "reflexion":  "src.smart_home_agent.architectures.reflexion",
+        "self_refine":"src.smart_home_agent.architectures.reflexion",
+        "tot":        "src.smart_home_agent.architectures.tot",
+        # "debate":   "src.smart_home_agent.architectures.debate",          # if you add
+        # "sc":       "src.smart_home_agent.architectures.self_consistency", # if you add
     }
 
     def run(self, architecture: str, user_text: str, model_type: ModelType, timeout_s: int = 120) -> str:
