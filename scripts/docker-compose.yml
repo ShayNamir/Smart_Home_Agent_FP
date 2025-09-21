@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  # Home Assistant for testing
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    volumes:
+      - ./homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+    environment:
+      - TZ=UTC
+
+  # Ollama for local AI models
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    restart: unless-stopped
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+
+  # Smart Home AI Agent (development)
+  smart-home-agent:
+    build: .
+    container_name: smart-home-agent
+    volumes:
+      - .:/app
+      - ./bench_results:/app/bench_results
+    ports:
+      - "8000:8000"
+    depends_on:
+      - homeassistant
+      - ollama
+    environment:
+      - HA_URL=http://homeassistant:8123
+      - OLLAMA_URL=http://ollama:11434
+    command: python main.py
+    restart: "no"
+
+volumes:
+  ollama_data:
