@@ -1,4 +1,4 @@
-# דרישות לבנצ'מארק המודלים
+# Requirements for model benchmark
 pandas>=1.5.0
 openpyxl>=3.0.0
 pydantic-ai>=0.0.20

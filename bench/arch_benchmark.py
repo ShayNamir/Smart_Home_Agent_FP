@@ -41,14 +41,14 @@ except ImportError:
 RESULTS_DIR = "/Users/shaynamir/Library/CloudStorage/OneDrive-ArielUniversity/לימודים/קורסים/פרויקט גמר/Smart_Home_Agent_FP/bench/bench_results"
 MODEL = ModelType.OLLAMA_QWEN3_4B
 
-# Profile CORE: only these 3 architectures (≈180 מבחנים)
+# Profile CORE: only these 3 architectures (≈180 tests)
 ARCHITECTURES_CORE = ["react", "reflexion", "tot"]
 ARCHITECTURES_ALL  = ["standard", "cot", "react", "reflexion", "tot"]
 
 REPEATS = 1
 CHECKPOINT_CSV = os.path.join(RESULTS_DIR, "bench_live.csv")
 
-# Timing guards for HA state stabilization (שומרים קצר כדי לזרז)
+# Timing guards for HA state stabilization (keep short to speed up)
 WAIT_AFTER_SETUP = 0.0
 POST_ACTION_WAIT = 0.0
 
@@ -161,7 +161,7 @@ def _pick_quota_preserve_order(tests: List[dict], limit: int) -> List[dict]:
 def select_tests_profile(profile: str) -> List[Dict[str, str]]:
     """
     Profiles:
-      - 'core'  : ~60 tests (15 per domain x 4 domains) ⇒ 180 עבור 3 ארכיטקטורות.
+      - 'core'  : ~60 tests (15 per domain x 4 domains) ⇒ 180 for 3 architectures.
       - 'lite'  : ~36 tests (9 per domain x 4 domains).
       - 'micro' : ~18 tests (≈4-5 per domain).
       - 'long'  : all non-error tests.
@@ -183,7 +183,7 @@ def select_tests_profile(profile: str) -> List[Dict[str, str]]:
         # 9 per domain: action 5 + status 4
         per_dom = {"action": 5, "status": 4}
     elif profile == "micro":
-        # ~18 total: action 3 + status 2 per domain (≈5 x 4 = 20; בפועל אם חסר פשוט פחות)
+        # ~18 total: action 3 + status 2 per domain (≈5 x 4 = 20; in practice if missing just less)
         per_dom = {"action": 3, "status": 2}
     else:
         # fallback to core
@@ -414,7 +414,7 @@ class ArchitectureBenchmark:
         with pd.ExcelWriter(out_path, engine="openpyxl") as writer:
             # Sheet 1: ALL results (historical + current)
             df_all.to_excel(writer, index=False, sheet_name="results_all")
-            # Sheet 2: only rows created in THIS run (for ניתוח מהיר)
+            # Sheet 2: only rows created in THIS run (for quick analysis)
             df_new.to_excel(writer, index=False, sheet_name="results_new")
 
             # Sheet 3: summary by architecture/category (ALL)

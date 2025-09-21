@@ -41,7 +41,7 @@ def _is_obviously_bad(text: str) -> bool:
     return False
 
 # ===== Suffixes =====
-# דרך B: הניסיון הראשון (Standard) מכיל אישור מפורש לאחר פעולה
+# Way B: First attempt (Standard) contains explicit confirmation after action
 _STANDARD_SUFFIX = """
 Use tools only; never guess names/services/entity_id.
 Tools: get_entities_by_domain_tool, get_entities_details_tool, service_call_tool.

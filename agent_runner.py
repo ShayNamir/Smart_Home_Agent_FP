@@ -7,9 +7,9 @@ import importlib
 from pydantic_ai import Agent
 from pydantic_ai.models import ModelSettings
 from pydantic_ai.models.openai import OpenAIModel
-# OpenAIProvider לא נדרש בגרסה זו
+# OpenAIProvider not required in this version
 
-# החלף לנתיב שלך אם שונה
+# Replace with your path if different
 from core.ha import (
     get_entities_by_domain,
     get_entities_details,
@@ -59,7 +59,7 @@ class ModelType(Enum):
 
 class AgentRunner:
     """
-    גשר ליצירת סוכנים, רישום מודלים, טעינת כלים, והרצת ארכיטקטורות.
+    Bridge for creating agents, registering models, loading tools, and running architectures.
     """
     def __init__(
         self,
@@ -75,7 +75,7 @@ class AgentRunner:
         self.ollama_base_url = ollama_base_url
         self.ollama_api_key = ollama_api_key
 
-        # רישום מפעלים לכל מודל זמין
+        # Register factories for each available model
         self.available_models: Dict[ModelType, Callable[[], Any]] = {
             ModelType.OLLAMA_QWEN3_4B:    self._ollama_factory("qwen3:4b"),
             ModelType.OLLAMA_GEMMA3_4B:   self._ollama_factory("gemma3:4b"),
@@ -151,7 +151,7 @@ class AgentRunner:
         self._register_tools(agent)
         return agent
 
-    # ארכיטקטורות שמבנות אותו Agent — ההבדלים בפרומפטים שבמודולי Arch.*
+    # Architectures that build the same Agent — differences are in prompts in Arch.* modules
     def _load_standard_agent(self, model: Any) -> Agent:
         return self._build_agent(model)
 
@@ -175,8 +175,8 @@ class AgentRunner:
         "reflexion":  "Arch.reflexion",
         "self_refine":"Arch.reflexion",
         "tot":        "Arch.tot",
-        # "debate":   "Arch.debate",          # אם תוסיף
-        # "sc":       "Arch.self_consistency", # אם תוסיף
+        # "debate":   "Arch.debate",          # if you add
+        # "sc":       "Arch.self_consistency", # if you add
     }
 
     def run(self, architecture: str, user_text: str, model_type: ModelType, timeout_s: int = 120) -> str:

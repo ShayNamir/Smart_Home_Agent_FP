@@ -1,56 +1,56 @@
 # Smart Home Agent Final Project
 
-פרויקט גמר - סוכן בית חכם מבוסס AI עם השוואת ארכיטקטורות ומודלים
+Final Project - AI-based Smart Home Agent with Architecture and Model Comparison
 
-## תיאור הפרויקט
+## Project Description
 
-פרויקט זה מפתח סוכן בית חכם המבוסס על מודלי AI מקומיים (Ollama) ומשווה בין ארכיטקטורות שונות לביצוע משימות בית חכם. הפרויקט כולל:
+This project develops a smart home agent based on local AI models (Ollama) and compares different architectures for performing smart home tasks. The project includes:
 
-- **סוכן בית חכם** עם תמיכה במודלים מקומיים
-- **השוואת ארכיטקטורות** (Standard, CoT, ReAct, Reflexion, ToT)
-- **השוואת מודלים** מקומיים
-- **בנצ'מארק מקיף** עם דוחות Excel מפורטים
+- **Smart Home Agent** with support for local models
+- **Architecture Comparison** (Standard, CoT, ReAct, Reflexion, ToT)
+- **Local Model Comparison**
+- **Comprehensive Benchmark** with detailed Excel reports
 
-## מבנה הפרויקט
+## Project Structure
 
 ```
 Smart_Home_Agent_FP/
-├── agent_runner.py          # רכיב ראשי להרצת הסוכן
-├── main.py                  # קובץ ראשי להרצת הפרויקט
-├── core/                    # רכיבי ליבה
-│   ├── ha.py               # ממשק Home Assistant
-│   └── objects.py          # אובייקטים בסיסיים
-├── src/smart_home_agent/    # קוד מקור
-│   └── architectures/      # ארכיטקטורות AI
-├── bench/                   # בנצ'מארק ארכיטקטורות
-│   ├── arch_benchmark.py   # השוואת ארכיטקטורות
-│   └── model_benchmark.py  # השוואת מודלים
-├── benchmark_models/        # בנצ'מארק מודלים חדש
-│   ├── benchmark_runner.py  # הרצת בנצ'מארק מודלים
-│   └── benchmark_commands.py # פקודות בנצ'מארק
-├── config/                  # קבצי תצורה
-├── docs/                    # תיעוד
-└── scripts/                 # סקריפטים עזר
+├── agent_runner.py          # Main component for running the agent
+├── main.py                  # Main file for running the project
+├── core/                    # Core components
+│   ├── ha.py               # Home Assistant interface
+│   └── objects.py          # Basic objects
+├── src/smart_home_agent/    # Source code
+│   └── architectures/      # AI architectures
+├── bench/                   # Architecture benchmark
+│   ├── arch_benchmark.py   # Architecture comparison
+│   └── model_benchmark.py  # Model comparison
+├── benchmark_models/        # New model benchmark
+│   ├── benchmark_runner.py  # Running model benchmark
+│   └── benchmark_commands.py # Benchmark commands
+├── config/                  # Configuration files
+├── docs/                    # Documentation
+└── scripts/                 # Helper scripts
 ```
 
-## התקנה
+## Installation
 
-### דרישות מערכת
+### System Requirements
 
 - Python 3.8+
-- Home Assistant (מותקן ומריץ)
-- Ollama עם מודלים מקומיים
+- Home Assistant (installed and running)
+- Ollama with local models
 
-### התקנת תלויות
+### Install Dependencies
 
 ```bash
 pip install -r config/requirements.txt
 ```
 
-### התקנת מודלים ב-Ollama
+### Install Models in Ollama
 
 ```bash
-# התקנת מודלים מומלצים
+# Install recommended models
 ollama pull phi3:mini
 ollama pull llama3.2
 ollama pull mistral
@@ -59,37 +59,37 @@ ollama pull gemma3:4b
 ollama pull deepseek-r1:1.5b
 ```
 
-## שימוש
+## Usage
 
-### הרצת הסוכן הראשי
+### Running the Main Agent
 
 ```bash
 python main.py
 ```
 
-### בנצ'מארק ארכיטקטורות
+### Architecture Benchmark
 
 ```bash
 cd bench
 python arch_benchmark.py
 ```
 
-### בנצ'מארק מודלים
+### Model Benchmark
 
 ```bash
 cd benchmark_models
 python benchmark_runner.py
 ```
 
-## ארכיטקטורות נתמכות
+## Supported Architectures
 
-1. **Standard** - ארכיטקטורה בסיסית
+1. **Standard** - Basic architecture
 2. **CoT** - Chain of Thought
 3. **ReAct** - Reasoning and Acting
 4. **Reflexion** - Self-reflection
 5. **ToT** - Tree of Thoughts
 
-## מודלים נתמכים
+## Supported Models
 
 - phi3:mini
 - llama3.2
@@ -98,39 +98,39 @@ python benchmark_runner.py
 - gemma3:4b
 - deepseek-r1:1.5b
 
-## קטגוריות פקודות
+## Command Categories
 
-- **פקודות פעולה** - הדלקה/כיבוי מכשירים
-- **שאילתות סטטוס** - בדיקת מצב מכשירים
-- **טיפול בשגיאות** - פקודות למכשירים לא קיימים
+- **Action Commands** - Turn on/off devices
+- **Status Queries** - Check device status
+- **Error Handling** - Commands for non-existent devices
 
-## פלט
+## Output
 
-הפרויקט יוצר דוחות Excel מפורטים עם:
+The project creates detailed Excel reports with:
 
-- השוואת ביצועים בין ארכיטקטורות
-- השוואת ביצועים בין מודלים
-- ניתוח לפי קטגוריות פקודות
-- סטטיסטיקות זמן ביצוע
+- Performance comparison between architectures
+- Performance comparison between models
+- Analysis by command categories
+- Execution time statistics
 
-## תרומה לפרויקט
+## Contributing to the Project
 
-1. Fork את הפרויקט
-2. צור branch חדש (`git checkout -b feature/AmazingFeature`)
-3. Commit את השינויים (`git commit -m 'Add some AmazingFeature'`)
-4. Push ל-branch (`git push origin feature/AmazingFeature`)
-5. פתח Pull Request
+1. Fork the project
+2. Create a new branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## רישיון
+## License
 
-פרויקט זה מופץ תחת רישיון MIT. ראה קובץ `LICENSE` לפרטים נוספים.
+This project is distributed under the MIT license. See the `LICENSE` file for more details.
 
-## קשר
+## Contact
 
-- מחבר: [שם המחבר]
-- אימייל: [כתובת אימייל]
-- פרויקט: [קישור לפרויקט]
+- Author: [Author Name]
+- Email: [Email Address]
+- Project: [Project Link]
 
-## הודעות תודה
+## Acknowledgments
 
-תודה לכל התורמים והקהילה שעזרו בפיתוח הפרויקט הזה.
+Thanks to all contributors and the community who helped develop this project.

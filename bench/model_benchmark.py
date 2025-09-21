@@ -185,7 +185,7 @@ def select_tests_profile(profile: str) -> List[Dict[str, str]]:
         # 9 per domain: action 5 + status 4
         per_dom = {"action": 5, "status": 4}
     elif profile == "micro":
-        # ~18 total: action 3 + status 2 per domain (≈5 x 4 = 20; בפועל אם חסר פשוט פחות)
+        # ~18 total: action 3 + status 2 per domain (≈5 x 4 = 20; in practice if missing just less)
         per_dom = {"action": 3, "status": 2}
     else:
         # fallback to core

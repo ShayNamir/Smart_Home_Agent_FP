@@ -1,6 +1,6 @@
 """
 Smart Home Agent Model Benchmark Package
-חבילה להשוואת ביצועים של מודלים מקומיים
+Package for comparing performance of local models
 """
 
 from .benchmark_runner import ModelBenchmarkRunner, run_model_benchmark

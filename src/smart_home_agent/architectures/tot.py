@@ -176,7 +176,7 @@ Rules:
 - Prefer minimal steps that reduce uncertainty. Avoid redundant or identical items.
 """.strip()
 
-# החלף את הפונקציה הקיימת
+# Replace the existing function
 def _planner_call_with_timeout(planner: Agent, prompt: str, step_timeout: int) -> str:
     ex = ThreadPoolExecutor(max_workers=1)
     fut = ex.submit(planner.run_sync, prompt)
@@ -186,9 +186,9 @@ def _planner_call_with_timeout(planner: Agent, prompt: str, step_timeout: int) -
         return raw
     except TimeoutError:
         _dbg(f"Planner watchdog timeout after {step_timeout}s; continuing.")
-        # אל תחכה לסגירה מלאה של ה־thread כדי לא להיתקע
+        # Don't wait for full thread shutdown to avoid getting stuck
         ex.shutdown(wait=False, cancel_futures=True)
-        # סימן מוסכם ל־timeout
+        # Agreed signal for timeout
         return "__TIMEOUT__"
     except Exception as e:
         ex.shutdown(wait=False, cancel_futures=True)

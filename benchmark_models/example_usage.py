@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
 """
-דוגמה לשימוש בבנצ'מארק המודלים
+Example usage for model benchmark
 """
 
 from benchmark_runner import ModelBenchmarkRunner, run_model_benchmark
 
 def example_short_test():
-    """דוגמה למבחן קצר"""
-    print("=== מבחן קצר ===")
+    """Example for short test"""
+    print("=== Short Test ===")
     
-    # מבחן קצר עם מודל אחד
+    # Short test with one model
     runner = ModelBenchmarkRunner(iterations=1)
     results = runner.run_benchmark("short", ["phi3:mini"])
     
-    # יצירת דוח
+    # Generate report
     excel_file = runner.generate_excel_report("short_test_example.xlsx")
-    print(f"דוח נוצר: {excel_file}")
+    print(f"Report created: {excel_file}")
 
 def example_long_test():
-    """דוגמה למבחן ארוך"""
-    print("=== מבחן ארוך ===")
+    """Example for long test"""
+    print("=== Long Test ===")
     
-    # מבחן ארוך עם מספר מודלים
+    # Long test with multiple models
     run_model_benchmark(
         test_type="long",
         models=["phi3:mini", "llama3.2"],
@@ -29,31 +29,31 @@ def example_long_test():
     )
 
 def example_custom_test():
-    """דוגמה למבחן מותאם אישית"""
-    print("=== מבחן מותאם ===")
+    """Example for custom test"""
+    print("=== Custom Test ===")
     
     runner = ModelBenchmarkRunner(iterations=1)
     
-    # רק פקודות פעולה
+    # Only action commands
     from benchmark_commands import get_commands_by_category
-    action_commands = get_commands_by_category("action_commands")[:5]  # רק 5 פקודות
+    action_commands = get_commands_by_category("action_commands")[:5]  # Only 5 commands
     
-    # הרצת המבחן
+    # Run the test
     results = []
     for command in action_commands:
         result = runner.run_single_test("phi3:mini", command, "action_commands")
         results.append(result)
     
-    # שמירת התוצאות
+    # Save results
     runner.results = results
     excel_file = runner.generate_excel_report("custom_test_example.xlsx")
-    print(f"דוח מותאם נוצר: {excel_file}")
+    print(f"Custom report created: {excel_file}")
 
 if __name__ == "__main__":
-    print("דוגמאות לשימוש בבנצ'מארק המודלים")
+    print("Examples for using the model benchmark")
     print("=" * 50)
     
-    choice = input("בחר דוגמה (1=קצר, 2=ארוך, 3=מותאם): ").strip()
+    choice = input("Choose example (1=short, 2=long, 3=custom): ").strip()
     
     if choice == "1":
         example_short_test()
@@ -62,4 +62,4 @@ if __name__ == "__main__":
     elif choice == "3":
         example_custom_test()
     else:
-        print("בחירה לא תקינה")
+        print("Invalid choice")

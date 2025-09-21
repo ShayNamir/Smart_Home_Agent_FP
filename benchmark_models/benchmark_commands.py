@@ -1,11 +1,11 @@
 """
 Smart Home Agent Benchmark Commands
-מכיל את כל הפקודות למבחן הביצועים של מודלים מקומיים
+Contains all commands for local model performance testing
 """
 
 from typing import List, Dict, Any
 
-# רשימת המכשירים הזמינים במערכת
+# List of available devices in the system
 DEVICES = {
     "light": [
         "Bed Light",
@@ -32,9 +32,9 @@ DEVICES = {
     ],
 }
 
-# פקודות פעולה (action commands)
+# Action commands
 ACTION_COMMANDS = [
-    # פקודות הדלקה
+    # Turn on commands
     "turn on the bed light",
     "switch on the ceiling lights",
     "activate the kitchen lights",
@@ -43,7 +43,7 @@ ACTION_COMMANDS = [
     "power on the entrance lights",
     "enable the decorative lights",
     
-    # פקודות כיבוי
+    # Turn off commands
     "turn off the bed light",
     "switch off the ceiling lights", 
     "deactivate the kitchen lights",
@@ -52,7 +52,7 @@ ACTION_COMMANDS = [
     "power off the entrance lights",
     "disable the decorative lights",
     
-    # פקודות מאווררים
+    # Fan commands
     "turn on the living room fan",
     "start the ceiling fan",
     "activate the percentage full fan",
@@ -64,7 +64,7 @@ ACTION_COMMANDS = [
     "please turn off the percentage limited fan",
     "can you stop the preset only limited fan",
     
-    # פקודות נעילה
+    # Lock commands
     "lock the front door",
     "please lock the kitchen door",
     "secure the openable lock",
@@ -73,9 +73,9 @@ ACTION_COMMANDS = [
     "open the openable lock",
 ]
 
-# פקודות סטטוס (status queries)
+# Status queries
 STATUS_COMMANDS = [
-    # בדיקת מצב תאורה
+    # Check lighting status
     "what is the state of the bed light",
     "what's the status of the ceiling lights",
     "is the kitchen lights on",
@@ -84,14 +84,14 @@ STATUS_COMMANDS = [
     "tell me the current state of the entrance lights",
     "what is the status of the decorative lights",
     
-    # בדיקת מצב מאווררים
+    # Check fan status
     "what is the state of the living room fan",
     "what's the status of the ceiling fan",
     "is the percentage full fan on",
     "is the percentage limited fan off",
     "check the preset only limited fan status",
     
-    # בדיקת מצב נעילות
+    # Check lock status
     "is the front door locked",
     "is the kitchen door unlocked",
     "what is the status of the openable lock",
@@ -99,9 +99,9 @@ STATUS_COMMANDS = [
     "is the kitchen door open",
 ]
 
-# פקודות שגיאה (error handling)
+# Error handling commands
 ERROR_COMMANDS = [
-    # מכשירים שלא קיימים
+    # Non-existent devices
     "turn on the garden light",
     "switch off the hallway lamp",
     "activate the balcony lights",
@@ -111,7 +111,7 @@ ERROR_COMMANDS = [
     "turn on the bathroom fan",
     "stop the attic fan",
     
-    # פקודות מעורפלות
+    # Ambiguous commands
     "turn it on",
     "turn it off",
     "switch that one on",
@@ -122,11 +122,11 @@ ERROR_COMMANDS = [
 ]
 
 def get_all_commands() -> List[str]:
-    """מחזיר את כל הפקודות למבחן"""
+    """Returns all commands for testing"""
     return ACTION_COMMANDS + STATUS_COMMANDS + ERROR_COMMANDS
 
 def get_commands_by_category(category: str) -> List[str]:
-    """מחזיר פקודות לפי קטגוריה"""
+    """Returns commands by category"""
     if category == "action_commands":
         return ACTION_COMMANDS
     elif category == "status_queries":
@@ -137,11 +137,11 @@ def get_commands_by_category(category: str) -> List[str]:
         return []
 
 def get_command_categories() -> List[str]:
-    """מחזיר את כל הקטגוריות"""
+    """Returns all categories"""
     return ["action_commands", "status_queries", "error_handling"]
 
 def get_category_weight(category: str) -> int:
-    """מחזיר משקל לקטגוריה"""
+    """Returns weight for category"""
     weights = {
         "action_commands": 3,
         "status_queries": 2, 
@@ -150,27 +150,27 @@ def get_category_weight(category: str) -> int:
     return weights.get(category, 1)
 
 def get_short_test_commands() -> List[str]:
-    """מחזיר פקודות למבחן קצר (כ-20 פקודות)"""
+    """Returns commands for short test (~20 commands)"""
     short_commands = []
     
-    # 8 פקודות פעולה
+    # 8 action commands
     short_commands.extend(ACTION_COMMANDS[:8])
     
-    # 8 פקודות סטטוס
+    # 8 status commands
     short_commands.extend(STATUS_COMMANDS[:8])
     
-    # 4 פקודות שגיאה
+    # 4 error commands
     short_commands.extend(ERROR_COMMANDS[:4])
     
     return short_commands
 
 def get_long_test_commands() -> List[str]:
-    """מחזיר את כל הפקודות למבחן ארוך"""
+    """Returns all commands for long test"""
     return get_all_commands()
 
 if __name__ == "__main__":
-    print(f"פקודות פעולה: {len(ACTION_COMMANDS)}")
-    print(f"פקודות סטטוס: {len(STATUS_COMMANDS)}")
-    print(f"פקודות שגיאה: {len(ERROR_COMMANDS)}")
-    print(f"סה\"כ פקודות: {len(get_all_commands())}")
-    print(f"פקודות למבחן קצר: {len(get_short_test_commands())}")
+    print(f"Action commands: {len(ACTION_COMMANDS)}")
+    print(f"Status commands: {len(STATUS_COMMANDS)}")
+    print(f"Error commands: {len(ERROR_COMMANDS)}")
+    print(f"Total commands: {len(get_all_commands())}")
+    print(f"Short test commands: {len(get_short_test_commands())}")

@@ -5,7 +5,7 @@ class HAObject:
     url: str
     token: str
 
-# System prompt מרכזי לכל הסוכנים (מתומצת למודל לוקאלי/קטן)
+# Central system prompt for all agents (condensed for local/small model)
 SYSTEM_PROMPT = """
 You are a small, fast Home Assistant agent.
 
