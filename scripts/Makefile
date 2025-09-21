@@ -45,12 +45,12 @@ test-coverage:
 
 # Code quality targets
 lint:
-	flake8 agent_runner.py core/ Arch/ arch_bench/ model_bench/ tests/
-	mypy agent_runner.py core/ Arch/ arch_bench/ model_bench/
+	flake8 agent_runner.py core/ Arch/ architecture_benchmark/ benchmark_models/ tests/
+	mypy agent_runner.py core/ Arch/ architecture_benchmark/ benchmark_models/
 
 format:
-	black agent_runner.py core/ Arch/ arch_bench/ model_bench/ tests/
-	isort agent_runner.py core/ Arch/ arch_bench/ model_bench/ tests/
+	black agent_runner.py core/ Arch/ architecture_benchmark/ benchmark_models/ tests/
+	isort agent_runner.py core/ Arch/ architecture_benchmark/ benchmark_models/ tests/
 
 # Cleanup targets
 clean:
@@ -67,10 +67,10 @@ run-demo:
 	python main.py
 
 run-arch-bench:
-	cd arch_bench && python arch_benchmark.py
+	cd architecture_benchmark && python arch_benchmark.py
 
 run-model-bench:
-	cd model_bench && python main.py
+	cd benchmark_models && python benchmark_runner.py
 
 # Setup targets
 setup-ollama:
@@ -89,19 +89,19 @@ dev-setup: install-dev setup-ollama
 
 # Benchmark targets
 benchmark-quick:
-	cd arch_bench && python arch_benchmark.py
+	cd architecture_benchmark && python arch_benchmark.py
 	@echo "Choose: micro profile, core architectures"
 
 benchmark-full:
-	cd arch_bench && python arch_benchmark.py
+	cd architecture_benchmark && python arch_benchmark.py
 	@echo "Choose: long profile, all architectures"
 
 model-benchmark-quick:
-	cd model_bench && python main.py
+	cd benchmark_models && python benchmark_runner.py
 	@echo "Choose: micro profile, 2 models"
 
 model-benchmark-full:
-	cd model_bench && python main.py
+	cd benchmark_models && python benchmark_runner.py
 	@echo "Choose: long profile, all models"
 
 # Documentation targets

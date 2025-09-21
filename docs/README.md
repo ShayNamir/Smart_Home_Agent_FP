@@ -40,16 +40,18 @@ Smart_Home_Agent_FP/
 │   ├── ha.py                  # Home Assistant API integration
 │   └── objects.py             # Data structures and system prompts
 │
-├── 📁 arch_bench/             # Architecture benchmarking system
+├── 📁 architecture_benchmark/ # Architecture benchmarking system
 │   ├── arch_benchmark.py      # Main benchmark runner
-│   ├── benchmark_commands.py  # Test command definitions
-│   └── bench_results/         # Benchmark results (Excel files)
-│
-├── 📁 model_bench/            # Model benchmarking system
 │   ├── model_benchmark.py     # Model comparison runner
-│   ├── main.py                # Interactive benchmark interface
 │   ├── benchmark_commands.py  # Test command definitions
-│   └── bench_results/         # Model comparison results
+│   ├── bench_results/         # Benchmark results (Excel files)
+│   └── architecture_bench.xlsx # Architecture benchmark results
+│
+├── 📁 benchmark_models/      # Model benchmarking system
+│   ├── benchmark_runner.py   # Benchmark execution engine
+│   ├── benchmark_commands.py # Test command definitions
+│   ├── benchmark_results/     # Model comparison results
+│   └── LLM_benchmark_2.0.xlsx # Model benchmark results
 │
 ├── agent_runner.py            # Core agent runner and model management
 └── main.py                    # Interactive demo interface
@@ -158,7 +160,7 @@ All models are run locally via Ollama for privacy and performance:
 Compare different AI architectures using the same model:
 
 ```bash
-cd arch_bench
+cd architecture_benchmark
 python arch_benchmark.py
 ```
 
@@ -171,7 +173,7 @@ python arch_benchmark.py
 Compare different AI models using the same architecture:
 
 ```bash
-cd model_bench
+cd benchmark_models
 python main.py
 ```
 
@@ -260,7 +262,7 @@ Goodbye! 👋
 ### Architecture Benchmark
 
 ```bash
-cd arch_bench
+cd architecture_benchmark
 python arch_benchmark.py
 ```
 
@@ -272,7 +274,7 @@ python arch_benchmark.py
 ### Model Benchmark
 
 ```bash
-cd model_bench
+cd benchmark_models
 python main.py
 ```
 
@@ -354,11 +356,11 @@ python -m pytest tests/integration/
 ### Benchmark Tests
 ```bash
 # Quick architecture test
-cd arch_bench && python arch_benchmark.py
+cd architecture_benchmark && python arch_benchmark.py
 # Choose: micro profile, core architectures
 
 # Quick model test  
-cd model_bench && python main.py
+cd benchmark_models && python main.py
 # Choose: micro profile, 2 models
 ```
 

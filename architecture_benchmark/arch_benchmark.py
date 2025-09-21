@@ -1,5 +1,8 @@
-# model_bench/model_benchmark.py — Model benchmark runner for comparing different local models
+# arch_bench/arch_benchmark.py — Architecture benchmark runner (CORE profile) for qwen3:4b (Ollama)
 from __future__ import annotations
+
+# ---- Global config tweaks ----
+SKIP_ERROR = True  # exclude error tests
 
 # --- Make project root importable ---
 import sys
@@ -26,7 +29,7 @@ from agent_runner import AgentRunner, ModelType
 from core.ha import get_entities_by_domain, get_entities_details, service_call
 
 try:
-    # when running as module: python -m model_bench.model_benchmark
+    # when running as module: python -m arch_bench.arch_benchmark
     from .benchmark_commands import BENCHMARK_TESTS, build_entity_map
 except ImportError:
     # when running this file directly
@@ -35,22 +38,17 @@ except ImportError:
 # -------------------------
 # Paths & constants
 # -------------------------
-RESULTS_DIR = "/Users/shaynamir/Library/CloudStorage/OneDrive-ArielUniversity/לימודים/קורסים/פרויקט גמר/Smart_Home_Agent_FP/bench/bench_results"
+RESULTS_DIR = "/Users/shaynamir/Library/CloudStorage/OneDrive-ArielUniversity/לימודים/קורסים/פרויקט גמר/Smart_Home_Agent_FP/architecture_benchmark/bench_results"
+MODEL = ModelType.OLLAMA_QWEN3_4B
 
-# Available models for testing
-AVAILABLE_MODELS = {
-    "phi3:mini": ModelType.OLLAMA_PHI3_MINI,
-    "llama3.2": ModelType.OLLAMA_LLAMA3_2,
-    "mistral": ModelType.OLLAMA_MISTRAL,
-    "qwen3:4b": ModelType.OLLAMA_QWEN3_4B,
-    "gemma3:4b": ModelType.OLLAMA_GEMMA3_4B,
-    "deepseek-r1:1.5b": ModelType.OLLAMA_DEEPSEEK_R1,
-}
+# Profile CORE: only these 3 architectures (≈180 tests)
+ARCHITECTURES_CORE = ["react", "reflexion", "tot"]
+ARCHITECTURES_ALL  = ["standard", "cot", "react", "reflexion", "tot"]
 
 REPEATS = 1
-CHECKPOINT_CSV = os.path.join(RESULTS_DIR, "model_bench_live.csv")
+CHECKPOINT_CSV = os.path.join(RESULTS_DIR, "bench_live.csv")
 
-# Timing guards for HA state stabilization
+# Timing guards for HA state stabilization (keep short to speed up)
 WAIT_AFTER_SETUP = 0.0
 POST_ACTION_WAIT = 0.0
 
@@ -139,7 +137,7 @@ def _resolve_entity(domain: str, friendly: str, entity_map: Dict[str, Dict[str, 
     except Exception:
         return None
 
-def _timestamped_filename(prefix: str = "model_bench") -> str:
+def _timestamped_filename(prefix: str = "bench") -> str:
     now = dt.datetime.now().strftime("%Y%m%d_%H%M")
     return f"{prefix}_{now}.xlsx"
 
@@ -163,13 +161,13 @@ def _pick_quota_preserve_order(tests: List[dict], limit: int) -> List[dict]:
 def select_tests_profile(profile: str) -> List[Dict[str, str]]:
     """
     Profiles:
-      - 'long'  : all non-error tests (full benchmark).
-      - 'core'  : ~60 tests (15 per domain x 4 domains).
+      - 'core'  : ~60 tests (15 per domain x 4 domains) ⇒ 180 for 3 architectures.
       - 'lite'  : ~36 tests (9 per domain x 4 domains).
       - 'micro' : ~18 tests (≈4-5 per domain).
+      - 'long'  : all non-error tests.
     """
     profile = (profile or "").strip().lower() or PROFILE_DEFAULT
-    include_cats = {"action", "status"}  # Skip error tests for model comparison
+    include_cats = {"action", "status"} if SKIP_ERROR else {"action", "status", "error"}
     base = [t for t in BENCHMARK_TESTS if (t.get("category","").lower() in include_cats)]
 
     if profile == "long":
@@ -202,11 +200,11 @@ def select_tests_profile(profile: str) -> List[Dict[str, str]]:
     return selected
 
 # -------------------------
-# Model Benchmark Runner
+# Benchmark Runner
 # -------------------------
-class ModelBenchmark:
+class ArchitectureBenchmark:
     COLUMNS = [
-        "model",
+        "architecture",
         "command",
         "category",
         "response",
@@ -225,7 +223,7 @@ class ModelBenchmark:
         self.entity_map = build_entity_map()  # from benchmark_commands.py
 
     # ---- Core row execution ----
-    def _run_action_test(self, model_name: str, test: Dict[str, str]) -> Dict[str, str]:
+    def _run_action_test(self, arch: str, test: Dict[str, str]) -> Dict[str, str]:
         domain = test["domain"]
         device = test["device"]
         cmd    = test["command"]
@@ -235,10 +233,10 @@ class ModelBenchmark:
         entity_id = _resolve_entity(domain, device, self.entity_map)
         if not entity_id:
             start = time.perf_counter()
-            resp = self.runner.run("standard", cmd, AVAILABLE_MODELS[model_name])
+            resp = self.runner.run(arch, cmd, MODEL)
             dur  = time.perf_counter() - start
             return {
-                "model": model_name,
+                "architecture": arch,
                 "command": cmd,
                 "category": "action",
                 "response": resp,
@@ -256,14 +254,14 @@ class ModelBenchmark:
         act_init = _safe_state(entity_id)
 
         start = time.perf_counter()
-        resp = self.runner.run("standard", cmd, AVAILABLE_MODELS[model_name])
+        resp = self.runner.run(arch, cmd, MODEL)
         dur  = time.perf_counter() - start
 
         if POST_ACTION_WAIT > 0: time.sleep(POST_ACTION_WAIT)
         act_fin = _safe_state(entity_id)
 
         return {
-            "model": model_name,
+            "architecture": arch,
             "command": cmd,
             "category": "action",
             "response": resp,
@@ -274,7 +272,7 @@ class ModelBenchmark:
             "act fin state": act_fin,
         }
 
-    def _run_status_test(self, model_name: str, test: Dict[str, str]) -> Dict[str, str]:
+    def _run_status_test(self, arch: str, test: Dict[str, str]) -> Dict[str, str]:
         domain = test["domain"]
         device = test["device"]
         cmd    = test["command"]
@@ -283,13 +281,13 @@ class ModelBenchmark:
         act_init = _safe_state(entity_id) if entity_id else "not_found"
 
         start = time.perf_counter()
-        resp = self.runner.run("standard", cmd, AVAILABLE_MODELS[model_name])
+        resp = self.runner.run(arch, cmd, MODEL)
         dur  = time.perf_counter() - start
 
         act_fin = _safe_state(entity_id) if entity_id else "not_found"
 
         return {
-            "model": model_name,
+            "architecture": arch,
             "command": cmd,
             "category": "status",
             "response": resp,
@@ -300,24 +298,35 @@ class ModelBenchmark:
             "act fin state": act_fin,
         }
 
-    def _run_single(self, model_name: str, test: Dict[str, str]) -> Dict[str, str]:
+    def _run_error_test(self, arch: str, test: Dict[str, str]) -> Dict[str, str]:
+        # Not expected under SKIP_ERROR=True, but kept for completeness
+        cmd = test["command"]
+        buf = io.StringIO()
+        start = time.perf_counter()
+        with redirect_stdout(buf):
+            resp = self.runner.run(arch, cmd, MODEL)
+        dur = time.perf_counter() - start
+        logs = buf.getvalue().lower()
+        called = "service_call_tool:" in logs
+        return {
+            "architecture": arch,
+            "command": cmd,
+            "category": "error",
+            "response": resp,
+            "run time": f"{dur:.2f}",
+            "exp init state": "no_action",
+            "exp fin state": "no_action",
+            "act init state": "not_called",
+            "act fin state": "called" if called else "not_called",
+        }
+
+    def _run_single(self, arch: str, test: Dict[str, str]) -> Dict[str, str]:
         cat = test["category"]
         if cat == "action":
-            return self._run_action_test(model_name, test)
+            return self._run_action_test(arch, test)
         if cat == "status":
-            return self._run_status_test(model_name, test)
-        # Skip error tests for model comparison
-        return {
-            "model": model_name,
-            "command": test.get("command", ""),
-            "category": cat,
-            "response": "SKIPPED",
-            "run time": "0.00",
-            "exp init state": "n/a",
-            "exp fin state": "n/a",
-            "act init state": "n/a",
-            "act fin state": "n/a",
-        }
+            return self._run_status_test(arch, test)
+        return self._run_error_test(arch, test)
 
     def _load_done_keys(self) -> set:
         done_keys = set()
@@ -326,49 +335,49 @@ class ModelBenchmark:
                 with open(CHECKPOINT_CSV, "r", encoding="utf-8", newline="") as f:
                     reader = csv.DictReader(f)
                     for r in reader:
-                        done_keys.add((r.get("model",""), r.get("command",""), r.get("category","")))
+                        done_keys.add((r.get("architecture",""), r.get("command",""), r.get("category","")))
             except csv.Error:
                 # fallback via pandas (no field-size limit)
                 df = pd.read_csv(CHECKPOINT_CSV, engine="python")
                 for _, r in df.iterrows():
-                    done_keys.add((str(r.get("model","")), str(r.get("command","")), str(r.get("category",""))))
+                    done_keys.add((str(r.get("architecture","")), str(r.get("command","")), str(r.get("category",""))))
         return done_keys
 
-    def run_tests(self, tests: List[Dict[str, str]], models: List[str]) -> str:
+    def run_tests(self, tests: List[Dict[str, str]], architectures: List[str]) -> str:
         rows: List[Dict[str, str]] = []
 
         done_keys = self._load_done_keys()
-        print(f"[MODEL_BENCH] Resuming: found {len(done_keys)} completed rows in checkpoint.")
+        print(f"[BENCH] Resuming: found {len(done_keys)} completed rows in checkpoint.")
 
         # compute total remaining for progress display
         remaining = []
-        for model in models:
+        for arch in architectures:
             for test in tests:
-                key = (model, test.get("command",""), test.get("category",""))
+                key = (arch, test.get("command",""), test.get("category",""))
                 for _ in range(self.repeats):
                     if key not in done_keys:
                         remaining.append(key)
         total_remaining = len(remaining)
         idx = 0
 
-        for model in models:
-            print(f"[MODEL_BENCH] Running model: {model} ({len(tests)} tests x {self.repeats} repeats)")
+        for arch in architectures:
+            print(f"[BENCH] Running architecture: {arch} ({len(tests)} tests x {self.repeats} repeats)")
             for test in tests:
                 cmd = test.get("command", "")
                 cat = test.get("category", "")
-                key = (model, cmd, cat)
+                key = (arch, cmd, cat)
 
                 for _ in range(self.repeats):
                     if key in done_keys:
                         continue
 
                     idx += 1
-                    print(f"Test {idx}/{total_remaining} {model}: {cmd}")
+                    print(f"Test {idx}/{total_remaining} {arch}: {cmd}")
                     try:
-                        row = self._run_single(model, test)
+                        row = self._run_single(arch, test)
                     except Exception as e:
                         row = {
-                            "model": model,
+                            "architecture": arch,
                             "command": cmd,
                             "category": cat,
                             "response": f"ERROR: {e}",
@@ -389,8 +398,8 @@ class ModelBenchmark:
                         w.writerow(row)
                     done_keys.add(key)
 
-        # === Save Excel with comprehensive analysis ===
-        filename = _timestamped_filename(prefix="model_bench")
+        # === Save a SINGLE Excel including ALL historical rows + current run ===
+        filename = _timestamped_filename(prefix="bench")
         out_path = os.path.join(self.results_dir, filename)
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
 
@@ -402,35 +411,22 @@ class ModelBenchmark:
 
         df_new = pd.DataFrame(rows, columns=self.COLUMNS)
 
-        with pd.ExcelWriter(out_path, engine='openpyxl') as writer:
+        with pd.ExcelWriter(out_path, engine="openpyxl") as writer:
             # Sheet 1: ALL results (historical + current)
-            df_all.to_excel(writer, index=False, sheet_name="All Results")
-            
-            # Sheet 2: only rows created in THIS run
-            df_new.to_excel(writer, index=False, sheet_name="Current Run")
+            df_all.to_excel(writer, index=False, sheet_name="results_all")
+            # Sheet 2: only rows created in THIS run (for quick analysis)
+            df_new.to_excel(writer, index=False, sheet_name="results_new")
 
-            # Sheet 3: Model comparison summary
+            # Sheet 3: summary by architecture/category (ALL)
             if not df_all.empty and "run time" in df_all.columns:
                 tmp = df_all.copy()
                 tmp["run time"] = pd.to_numeric(tmp["run time"], errors="coerce")
-                
-                # Model performance summary
-                model_summary = tmp.groupby("model").agg({
-                    "run time": ["count", "mean", "median", "min", "max"],
-                    "command": "count"
-                }).round(2)
-                model_summary.columns = ["Total Tests", "Avg Time", "Median Time", "Min Time", "Max Time", "Command Count"]
-                model_summary.to_excel(writer, sheet_name="Model Summary")
+                agg = (tmp.groupby(["architecture","category"])["run time"]
+                         .agg(["count","mean","median","min","max"])
+                         .reset_index())
+                agg.to_excel(writer, index=False, sheet_name="summary_all")
 
-                # Category analysis by model
-                category_analysis = tmp.groupby(["model", "category"]).agg({
-                    "run time": ["count", "mean"],
-                    "command": "count"
-                }).round(2)
-                category_analysis.columns = ["Test Count", "Avg Time", "Command Count"]
-                category_analysis.to_excel(writer, sheet_name="Category Analysis")
-
-        print(f"[MODEL_BENCH] Saved results to: {out_path}")
+        print(f"[BENCH] Saved results to: {out_path}")
         return out_path
 
 # -------------------------
@@ -441,29 +437,27 @@ if __name__ == "__main__":
     choice = input("Profile? [core|lite|micro|long] (default core): ").strip().lower()
     profile = choice or PROFILE_DEFAULT
 
-    # Model selection
-    print(f"Available models: {list(AVAILABLE_MODELS.keys())}")
-    model_choice = input("Models? [all|custom csv] (default all): ").strip().lower()
-    if model_choice == "all" or not model_choice:
-        models = list(AVAILABLE_MODELS.keys())
-    elif model_choice.startswith("custom"):
-        # e.g., "custom phi3:mini,llama3.2"
-        parts = model_choice.replace("custom","").strip().strip(":, ")
-        models = [m.strip() for m in parts.split(",") if m.strip()]
-        # Validate models exist
-        models = [m for m in models if m in AVAILABLE_MODELS]
-        if not models:
-            print("No valid models specified, using all models")
-            models = list(AVAILABLE_MODELS.keys())
+    # Architectures: for CORE we default to react/reflexion/tot to reach ~180 tests total
+    arch_choice = input("Architectures? [core|all|custom csv] (default core=react,reflexion,tot): ").strip().lower()
+    if arch_choice == "all":
+        architectures = ARCHITECTURES_ALL
+    elif arch_choice.startswith("custom"):
+        # e.g., "custom standard,cot"
+        parts = arch_choice.replace("custom","").strip().strip(":, ")
+        architectures = [a.strip() for a in parts.split(",") if a.strip()]
+        if not architectures:
+            architectures = ARCHITECTURES_CORE
     else:
-        models = list(AVAILABLE_MODELS.keys())
+        architectures = ARCHITECTURES_CORE
 
     # Select tests by profile
     tests = select_tests_profile(profile)
-    print(f"[MODEL_BENCH] Profile: {profile}. Tests per model: {len(tests)}")
-    print(f"[MODEL_BENCH] Models: {models}")
+    if SKIP_ERROR:
+        tests = [t for t in tests if (t.get("category","").lower() != "error")]
+    print(f"[BENCH] Profile: {profile}. Tests per architecture: {len(tests)}")
+    print(f"[BENCH] Architectures: {architectures}")
 
-    bench = ModelBenchmark(results_dir=RESULTS_DIR, repeats=REPEATS)
+    bench = ArchitectureBenchmark(results_dir=RESULTS_DIR, repeats=REPEATS)
 
     # --- Preflight: warn unresolved entities (action/status only) ---
     unresolved = []
@@ -473,11 +467,11 @@ if __name__ == "__main__":
             if not eid:
                 unresolved.append(f'{t["category"]}: {t["command"]}  ({t["domain"]}/{t["device"]})')
     if unresolved:
-        print("[MODEL_BENCH][WARN] Unresolved entity_id for the following tests:")
+        print("[BENCH][WARN] Unresolved entity_id for the following tests:")
         for line in unresolved[:20]:
             print("  -", line)
         if len(unresolved) > 20:
             print(f"  ... (+{len(unresolved)-20} more)")
 
     # Run
-    ModelBenchmark(results_dir=RESULTS_DIR, repeats=REPEATS).run_tests(tests, models)
+    ArchitectureBenchmark(results_dir=RESULTS_DIR, repeats=REPEATS).run_tests(tests, architectures)

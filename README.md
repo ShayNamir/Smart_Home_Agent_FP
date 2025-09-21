@@ -40,12 +40,14 @@ This academic research project investigates the effectiveness of different AI ar
 │   └── 📦 objects.py          # Base objects & configurations
 ├── 🧠 src/smart_home_agent/    # AI agent source code
 │   └── 🏛️ architectures/      # AI architecture implementations
-├── 📈 bench/                   # Architecture benchmarking
+├── 📈 architecture_benchmark/  # Architecture benchmarking & results
 │   ├── 🏗️ arch_benchmark.py   # Architecture comparison
-│   └── 🤖 model_benchmark.py  # Model performance analysis
-├── 🔬 benchmark_models/        # Advanced model testing
+│   ├── 🤖 model_benchmark.py  # Model performance analysis
+│   └── 📊 architecture_bench.xlsx # Architecture benchmark results
+├── 🔬 benchmark_models/        # Model testing & results
 │   ├── 🏃 benchmark_runner.py  # Benchmark execution engine
-│   └── 📝 benchmark_commands.py # Test command definitions
+│   ├── 📝 benchmark_commands.py # Test command definitions
+│   └── 📊 LLM_benchmark_2.0.xlsx # Model benchmark results
 ├── ⚙️ config/                  # Configuration files
 ├── 📚 docs/                    # Documentation
 └── 🛠️ scripts/                 # Utility scripts
@@ -94,7 +96,7 @@ python main.py
 
 #### 📊 Architecture Benchmarking
 ```bash
-cd bench
+cd architecture_benchmark
 python arch_benchmark.py
 ```
 
