@@ -2,29 +2,30 @@
 
 <div align="center">
 
-![Smart Home](https://img.shields.io/badge/Smart%20Home-AI%20Powered-blue?style=for-the-badge&logo=home-assistant)
+![Academic Research](https://img.shields.io/badge/Academic-Research-purple?style=for-the-badge&logo=graduation-cap)
+![Computer Science](https://img.shields.io/badge/Computer%20Science-Final%20Project-blue?style=for-the-badge&logo=code)
+![Ariel University](https://img.shields.io/badge/Ariel%20University-Research-green?style=for-the-badge&logo=university)
 ![Python](https://img.shields.io/badge/Python-3.8+-green?style=for-the-badge&logo=python)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
-**🤖 AI-powered Smart Home Agent with Architecture & Model Comparison**
+**🎓 Academic Research: AI-powered Smart Home Agent with Architecture & Model Comparison**
 
-*Intelligent automation meets cutting-edge AI research*
+*Final Project for Computer Science Degree at Ariel University*
 
 </div>
 
 ---
 
-## 📋 Project Overview
+## 📋 Research Overview
 
-This project develops a sophisticated smart home agent powered by local AI models (Ollama) and provides comprehensive comparison between different AI architectures for smart home automation tasks.
+This academic research project investigates the effectiveness of different AI architectures for smart home automation tasks. The study develops a sophisticated smart home agent powered by local AI models (Ollama) and provides comprehensive comparison between various AI approaches.
 
-### ✨ Key Features
+### 🎯 Research Objectives
 
-- 🧠 **Smart Home Agent** with local model support
-- 🏗️ **Architecture Comparison** (Standard, CoT, ReAct, Reflexion, ToT)
-- 🔬 **Model Performance Analysis** across multiple local models
-- 📊 **Comprehensive Benchmarking** with detailed Excel reports
-- 🎯 **Real-time Device Control** via Home Assistant integration
+- 🧠 **Architecture Evaluation** - Compare Standard, CoT, ReAct, Reflexion, and ToT approaches
+- 🔬 **Model Performance Analysis** - Evaluate multiple local AI models
+- 📊 **Benchmarking Framework** - Develop comprehensive testing methodology
+- 🏠 **Smart Home Integration** - Real-world testing with Home Assistant
+- 📈 **Performance Metrics** - Detailed analysis of speed, accuracy, and efficiency
 
 ---
 
@@ -150,35 +151,36 @@ python benchmark_runner.py
 
 ---
 
-## 📊 Output & Reports
+## 📊 Research Results & Analysis
 
-The system generates comprehensive Excel reports featuring:
+The research generates comprehensive Excel reports featuring:
 
-- 📈 **Performance Metrics** - Speed and accuracy comparisons
-- 🏆 **Architecture Rankings** - Best performing approaches
-- 📊 **Model Analysis** - Detailed performance breakdowns
-- ⏱️ **Execution Statistics** - Timing and efficiency data
-- 📋 **Category Analysis** - Performance by command type
+- 📈 **Performance Metrics** - Speed and accuracy comparisons across architectures
+- 🏆 **Architecture Rankings** - Statistical analysis of best performing approaches
+- 📊 **Model Analysis** - Detailed performance breakdowns by model type
+- ⏱️ **Execution Statistics** - Timing and efficiency data analysis
+- 📋 **Category Analysis** - Performance evaluation by command type
+- 📚 **Research Documentation** - Academic findings and conclusions
 
 ---
 
-## 🤝 Contributing
+## 🤝 Academic Collaboration
 
-We welcome contributions! Here's how you can help:
+This research project welcomes academic collaboration and contributions:
 
-1. 🍴 **Fork** the project
-2. 🌿 **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. 💾 **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. 🔄 **Open** a Pull Request
+1. 🍴 **Fork** the repository for your research
+2. 🌿 **Create** a research branch (`git checkout -b research/YourResearchArea`)
+3. 💾 **Commit** your findings (`git commit -m 'Add research findings'`)
+4. 📤 **Push** to the branch (`git push origin research/YourResearchArea`)
+5. 🔄 **Open** a Pull Request for academic review
 
-### 🎯 Contribution Areas
+### 🎯 Research Areas for Collaboration
 
-- 🧠 New AI architectures
-- 🤖 Additional model support
-- 📊 Enhanced benchmarking
-- 🐛 Bug fixes and improvements
-- 📚 Documentation updates
+- 🧠 **New AI Architectures** - Implement and test novel approaches
+- 🤖 **Model Extensions** - Add support for additional AI models
+- 📊 **Enhanced Benchmarking** - Improve testing methodologies
+- 🏠 **Domain Applications** - Apply to other smart home scenarios
+- 📚 **Academic Documentation** - Contribute to research literature
 
 ---
 
@@ -188,30 +190,37 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 👥 Contact & Support
+## 👥 Academic Contact & Information
 
-- 👨‍💻 **Author**: Shay Namir
-- 📧 **Email**: [Your Email]
-- 🔗 **Project**: [GitHub Repository](https://github.com/ShayNamir/Smart_Home_Agent_FP)
-- 💬 **Issues**: [Report a Bug](https://github.com/ShayNamir/Smart_Home_Agent_FP/issues)
+- 👨‍💻 **Researcher**: Shay Namir
+- 🎓 **Institution**: Ariel University
+- 📚 **Department**: Computer Science
+- 🎯 **Project Type**: Final Project for Bachelor's Degree
+- 📧 **Academic Email**: [Your Academic Email]
+- 🔗 **Repository**: [GitHub Repository](https://github.com/ShayNamir/Smart_Home_Agent_FP)
+- 💬 **Research Discussion**: [Open Research Discussion](https://github.com/ShayNamir/Smart_Home_Agent_FP/issues)
 
 ---
 
-## 🙏 Acknowledgments
+## 🙏 Academic Acknowledgments
 
 Special thanks to:
 
-- 🌟 **Open Source Community** for amazing tools and libraries
-- 🏠 **Home Assistant Team** for the incredible platform
-- 🦙 **Ollama Team** for local AI model support
-- 👥 **Contributors** who helped shape this project
+- 🎓 **Ariel University** - Computer Science Department for academic support
+- 👨‍🏫 **Academic Supervisors** - For guidance and research direction
+- 🌟 **Open Source Community** - For providing essential tools and libraries
+- 🏠 **Home Assistant Team** - For the incredible smart home platform
+- 🦙 **Ollama Team** - For local AI model support and research tools
+- 👥 **Research Community** - For inspiration and academic collaboration
 
 ---
 
 <div align="center">
 
-**⭐ Star this repository if you found it helpful!**
+**⭐ Star this repository if you found the research valuable!**
 
-*Made with ❤️ for the smart home community*
+*Academic research made with ❤️ for the smart home and AI communities*
+
+**🎓 Final Project for Computer Science Degree at Ariel University**
 
 </div>
